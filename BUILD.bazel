@@ -21,6 +21,21 @@ babel(
     ],
 )
 
+babel(
+    name = "compile_test",
+    data = glob(["src/*.js"]) + [
+        "src/es5_test.babelrc",
+        "@npm//@babel/preset-env",
+    ],
+    output_dir = True,
+    args = glob(["src/*.js"]) +[
+        "--config-file",
+        "./$(execpath src/es5_test.babelrc)",
+        "--out-dir",
+        "$(@D)"
+    ],
+)
+
 "Run development server against babel output" 
 http_server(
     name = "server",
@@ -29,4 +44,13 @@ http_server(
         ":compile"
     ],
     args = ["."],
+)
+
+mocha_test(
+    name = "unit_tests",
+    args = ["test/*.spec.js"],
+    data = glob(["test/*.spec.js"]) + [
+        "@npm//domino",
+        ":compile_test",
+    ],
 )
