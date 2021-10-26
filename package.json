@@ -4,11 +4,20 @@
     "private": true,
     "devDependencies": {
         "@bazel/bazelisk": "latest",
-        "@bazel/ibazel": "latest",
-        "@bazel/buildifier": "latest"
+        "@bazel/buildifier": "latest",
+        "@bazel/ibazel": "latest"
     },
     "scripts": {
         "build": "bazel build //...",
-        "test": "bazel test //..."
+        "test": "bazel test //...",
+        "serve": "ibazel run :server"
+    },
+    "dependencies": {
+        "@babel/cli": "7.15.7",
+        "@babel/core": "7.15.8",
+        "@babel/preset-env": "7.15.8",
+        "domino": "2.1.6",
+        "http-server": "14.0.0",
+        "mocha": "9.1.3"
     }
 }

@@ -1,4 +1,29 @@
 # Add rules here to build your software
 # See https://docs.bazel.build/versions/main/build-ref.html#BUILD_files
+load("@npm//@babel/cli:index.bzl", "babel")
+load("@npm//mocha:index.bzl", "mocha_test")
+load("@npm//http-server:index.bzl", "http_server")
 
+babel(
+    name = "compile",
+    data = glob(["src/*.js"]) + [
+        "src/es5.babelrc",
+        "@npm//@babel/preset-env",
+    ],
+    output_dir = True,
+    args = glob(["src/*.js"]) +[
+        "--config-file",
+        "./$(execpath src/es5.babelrc)",
+        "--out-dir",
+        "$(@D)"
+    ],
+)
 
+http_server(
+    name = "server",
+    data = [
+        "index.html",
+        ":compile"
+    ],
+    args = ["."],
+)
