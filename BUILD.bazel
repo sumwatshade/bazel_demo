@@ -1,9 +1,11 @@
 # Add rules here to build your software
-# See https://docs.bazel.build/versions/main/build-ref.html#BUILD_files
+
+"Each of these extract output binaries into bazel rules"
 load("@npm//@babel/cli:index.bzl", "babel")
 load("@npm//mocha:index.bzl", "mocha_test")
 load("@npm//http-server:index.bzl", "http_server")
 
+"build all source files as ESM and push to compile output directory"
 babel(
     name = "compile",
     data = glob(["src/*.js"]) + [
@@ -19,6 +21,7 @@ babel(
     ],
 )
 
+"Run development server against babel output" 
 http_server(
     name = "server",
     data = [
