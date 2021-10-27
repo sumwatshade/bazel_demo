@@ -1,0 +1,11 @@
+{
+    "name": "@shady/test-package",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {
+    },
+    "scripts": {
+    },
+    "dependencies": {
+    }
+}

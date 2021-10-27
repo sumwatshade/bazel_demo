@@ -1,0 +1,58 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "generated_file_test", "nodejs_binary", "npm_package_bin", "pkg_npm")
+load("@npm//@bazel/esbuild:index.bzl", "esbuild")
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
+
+# build the Typescript to JS with ts_project
+ts_project(
+    name = "lib",
+    srcs = glob(['src/*.ts']),
+    tsconfig = {
+        "compilerOptions": {
+            "esModuleInterop": True,
+        },
+    },
+    deps = [],
+)
+
+# create a single bundle of the JS sources
+esbuild(
+    name = "bundle",
+    entry_point = "src/index.ts",
+    minify = True,
+    # setting node as the platform will default us to CJS
+    platform = "node",
+    deps = [
+        ":lib",
+    ],
+)
+
+# binary for running our tool
+nodejs_binary(
+    name = "bin",
+    data = [
+        ":bundle",
+    ],
+    entry_point = "bundle.js",
+)
+
+# run the built tool, capturing the stdout to the text file
+npm_package_bin(
+    name = "greeter",
+    stdout = "greeting.txt",
+    tool = ":bin",
+)
+
+# # ensure our text file is what we are expecting
+generated_file_test(
+    name = "test",
+    src = "smoke/greeting.golden.txt",
+    generated = "greeting.txt",
+)
+
+# @external_begin
+pkg_npm(
+    name = "npm_package",
+    package_name = "@shady/test-package",
+    srcs = ["package.json"],
+    deps = [":lib"],
+)
