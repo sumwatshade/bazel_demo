@@ -42,12 +42,12 @@ npm_package_bin(
     tool = ":bin",
 )
 
-# # ensure our text file is what we are expecting
-generated_file_test(
-    name = "test",
-    src = "smoke/greeting.golden.txt",
-    generated = "greeting.txt",
-)
+# # # ensure our text file is what we are expecting
+# generated_file_test(
+#     name = "test",
+#     src = "smoke/greeting.golden.txt",
+#     generated = "greeting.txt",
+# )
 
 # @external_begin
 pkg_npm(

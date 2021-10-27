@@ -32,7 +32,7 @@ http_server(
 )
 
 mocha_test(
-    name = "unit_tests",
+    name = "mocha_testing",
     args = [
         "test/*.spec.js",
     ],
